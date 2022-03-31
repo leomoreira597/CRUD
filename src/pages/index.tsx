@@ -9,6 +9,10 @@ import React from "react";
 
 export default function Home() {
 
+  const [cliente, setCliente] = useState<Cliente>(Cliente.vazio())
+  const [visivel, setVisivel] = useState<'tabela' | 'form'> ('tabela')
+
+
   const clientes = [
     new Cliente('Ana',34, '1'),
     new Cliente('Bia',24, '2'),
@@ -17,7 +21,8 @@ export default function Home() {
   ]
 
   function clienteSelecionado(cliente: Cliente){
-    console.log(cliente.nome)
+    setCliente(cliente)
+    setVisivel('form')
   }
 
   function clienteExcluido(cliente: Cliente){
@@ -25,10 +30,14 @@ export default function Home() {
   }
 
   function salvarCliente(cliente: Cliente) {
-    console.log(cliente)
+    setCliente(Cliente.vazio())
+    setVisivel('tabela')
   }
 
-  const [visivel, setVisivel] = useState<'tabela' | 'form'> ('tabela')
+  function novoCliente() {
+    console.log(cliente)
+    setVisivel('form')
+  }
 
   return (
     <div className={`
@@ -41,7 +50,7 @@ export default function Home() {
           <React.Fragment>
           <div className="flex justify-end">
             <Botao className="mb-4"
-              onClick={() => setVisivel('form')}>
+              onClick={novoCliente}>
                  Novo Cliente
               </Botao>
           </div>
@@ -49,7 +58,7 @@ export default function Home() {
             clienteExcluido={clienteExcluido}/>
         </React.Fragment>
         ) : (
-          <Formulario cliente={clientes[0]}
+          <Formulario cliente={cliente}
             cancelado={() => setVisivel('tabela')}
             clienteMudou={salvarCliente}
           />
